@@ -31,6 +31,14 @@ pipeline {
                 sh 'mvn test'
             }
         }
+
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('Sonarqube-8.0') {
+                    sh 'mvn sonar:sonar -Dsonar.projectKey=sample-war-project -Dsonar.projectName=sample-war-project'
+                }
+            }
+        }
     }
 }
 
