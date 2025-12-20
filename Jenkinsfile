@@ -39,6 +39,26 @@ pipeline {
                 }
             }
         }
+
+        stage('Nexus Upload') {
+            steps {
+                nexusArtifactUploader(
+                    artifacts: [[
+                        artifactId: 'sample-war-project',
+                        classifier: '',
+                        file: 'target/sample-war-project.war',
+                        type: 'war'
+                    ]],
+                    credentialsId: 'nexus-credential',
+                    groupId: 'com.example.web',
+                    nexusUrl: '3.108.54.141:8081',
+                    nexusVersion: 'nexus3',
+                    protocol: 'http',
+                    repository: 'sample-war-project-snapshot',
+                    version: '1.0-SNAPSHOT'
+                )
+            }
+        }
     }
 }
 
