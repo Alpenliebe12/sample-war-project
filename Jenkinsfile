@@ -59,6 +59,15 @@ pipeline {
                 )
             }
         }
+
+        stage('Deploy to Tomcat') {
+            steps {
+                sshagent(['tomcat-ssh-agent']) {
+                    sh 'scp -o StrictHostKeyChecking=no target/sample-war-project.war ubuntu@3.108.219.162:/tmp/'
+                    sh 'ssh -o StrictHostKeyChecking=no ubuntu@3.108.219.162 "sudo mv /tmp/sample-war-project.war /opt/tomcat/apache-tomcat-10.1.49/webapps/sample-war-project.war"'
+                }
+            }
+        }
     }
 }
 
