@@ -35,9 +35,7 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('Sonarqube-8.0') {
-                    withCredentials([string(credentialsId: 'sonarqube-credentials', variable: 'SONAR_TOKEN')]) {
-                        sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=sample-war-project -Dsonar.projectName=sample-war-project -Dsonar.host.url=http://13.126.185.160:9000 -Dsonar.token=${SONAR_TOKEN}'
-                    }
+                    sh 'mvn sonar:sonar -Dsonar.projectKey=sample-war-project -Dsonar.projectName=sample-war-project'
                 }
             }
         }
