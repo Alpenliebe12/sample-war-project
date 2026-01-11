@@ -13,7 +13,7 @@ pipeline {
                     branches: [[name: '*/master']],
                     userRemoteConfigs: [[
                         credentialsId: 'github-credentials',
-                        url: 'https://github.com/balagithub98/sample-war-project.git'
+                        url: 'https://github.com/Alpenliebe12/demo-war-project.git'
                     ]]
                 ])
             }
@@ -35,7 +35,7 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('Sonarqube-8.0') {
-                    sh 'mvn sonar:sonar -Dsonar.projectKey=sample-war-project -Dsonar.projectName=sample-war-project'
+                    sh 'mvn sonar:sonar -Dsonar.projectKey=demo-war-project -Dsonar.projectName=demo-war-project'
                 }
             }
         }
@@ -44,9 +44,9 @@ pipeline {
             steps {
                 nexusArtifactUploader(
                     artifacts: [[
-                        artifactId: 'sample-war-project',
+                        artifactId: 'demo-war-project',
                         classifier: '',
-                        file: 'target/sample-war-project.war',
+                        file: 'target/demo-war-project.war',
                         type: 'war'
                     ]],
                     credentialsId: 'nexus-credential',
@@ -54,7 +54,7 @@ pipeline {
                     nexusUrl: '3.108.54.141:8081',
                     nexusVersion: 'nexus3',
                     protocol: 'http',
-                    repository: 'sample-war-project-snapshot',
+                    repository: 'demo-war-project-snapshot',
                     version: '1.0-SNAPSHOT'
                 )
             }
@@ -63,8 +63,8 @@ pipeline {
         stage('Deploy to Tomcat') {
             steps {
                 sshagent(['tomcat-ssh-agent']) {
-                    sh 'scp -o StrictHostKeyChecking=no target/sample-war-project.war ubuntu@3.108.219.162:/tmp/'
-                    sh 'ssh -o StrictHostKeyChecking=no ubuntu@3.108.219.162 "sudo mv /tmp/sample-war-project.war /opt/tomcat/apache-tomcat-10.1.49/webapps/sample-war-project.war"'
+                    sh 'scp -o StrictHostKeyChecking=no target/demo-war-project.war ubuntu@3.108.219.162:/tmp/'
+                    sh 'ssh -o StrictHostKeyChecking=no ubuntu@3.108.219.162 "sudo mv /tmp/demo-war-project.war /opt/tomcat/apache-tomcat-10.1.49/webapps/demo-war-project.war"'
                 }
             }
         }
